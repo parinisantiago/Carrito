@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="model">
+    <class name="Carrito">
+        <id name="id" type="long" column="idCarrito" unsaved-value="0">
+            <generator class="increment" />
+        </id>
+        <discriminator column="carritoTipo" type="string"/>
+        <property name="precio" />
+        <property name="descuento" />
+        <set name="productos" cascade="all">
+        	<key column="idCarrito"/>
+        	<many-to-many column="idProducto" class="Producto"/>
+        </set>
+        <subclass name="CarritoNormal" discriminator-value="N">
+        </subclass>
+        <subclass name="CarritoVip" discriminator-value="V">
+        </subclass>
+        <subclass name="CarritoEspecial" discriminator-value="E">
+        </subclass>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd " xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans">
+
+<!-- SessionFactory de hibernate -->
+<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" id="sessionFactory">
+	<property name="dataSource">
+		<ref bean="dataSource"/>
+	</property>
+<property name="mappingResources">
+	<list>
+		<value>hibernate/Producto.hbm.xml</value>
+		<value>hibernate/Carrito.hbm.xml</value>
+		<value>hibernate/Usuario.hbm.xml</value>
+		<value>hibernate/Danaide.hbm.xml</value>
+	</list>
+</property>
+
+<property name="hibernateProperties">
+	<props>
+		<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+		<prop key="hibernate.show_sql">true</prop>
+		<prop key="hibernate.format_sql">true</prop>
+		<prop key="hibernate.c3p0.idle_test_period">28680</prop>
+		<!--  <prop key="hibernate.hbm2ddl.auto">create</prop> -->
+	</props>
+</property>
+
+</bean>
+
+</beans>

@@ -1,0 +1,68 @@
+<div class="col-xs-12">
+<div ng-if="hayCarrito()" class="col-xs-12">
+	<h4>Mi carrito
+		<button class="btn btn-danger btn-sm" ng-click="borrarCarrito()">
+			Borrar carrito
+		</button>
+	</h4>
+	<table class="table table-hover">
+		<tr>
+			<th>Producto</th>
+			<th>Precio</th>
+		</tr>
+		<tr ng-repeat="producto in carrito.productos">
+			<td>{{producto.nombre}}</td>
+		    <td>
+		    	<button class="btn btn-danger" ng-click="quitarProducto(producto)">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				</button>
+		    	${{producto.precio}}
+		    </td> 
+		</tr>
+	</table>
+	<button class="btn btn-success btn-lg" ng-click="pagarCarrito()" ng-if="carrito.productos.length" data-toggle="modal" data-target="#producto">
+		Terminar compra
+	</button>  
+</div>
+<div ng-if="mostrarBoton()" class="col-xs-12">
+	<button class="btn btn-primary btn-lg" ng-click="crearCarrito()">
+		Nueva compra
+	</button>
+</div>
+
+
+	<div class="modal fade" id="producto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  	<div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Top Productos</h4>
+      </div>
+      <div class="modal-body">
+      <table class="table table-hover" >
+			<tr>
+				<th>Nombre</th>
+				<th>Precio</th>
+			</tr>
+			<tr ng-repeat="producto in carritoPago.productos">
+				<td>{{producto.nombre}}</td>
+				<td>{{producto.precio | number:'1.0'}}</td>
+			</tr>
+			<tr>
+				<td><b>Precio a pagar</b></td> 
+				<td><b>{{carritoPago.precio + carritoPago.descuento | number:'1.2'}}</b></td>
+			</tr>	
+			<tr>
+				<td><b>Descuento</b></td>
+				<td><b>-{{carritoPago.descuento | number:'1.2'}}</b></td>
+			</tr>
+			<tr>
+				<td><b>Precio total</b></td> 
+				<td><b>{{carritoPago.precio | number:'1.2'}}</b></td>
+			</tr>	
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

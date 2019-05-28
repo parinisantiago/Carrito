@@ -1,0 +1,138 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd 
+       http://www.springframework.org/schema/jdbc 
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+       
+	<!-- agrega los beans de hibernate y dataSource -->
+	<import resource="classpath:dataSource.xml" />
+    <import resource="classpath:hibernate.cfg.xml" />
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+	<!-- sesiones de hibernate -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+
+	
+	<!-- Para obtener el application context -->
+	<bean id="contextApplicationContextProvider" class="util.DanaideContextProvider"></bean>
+	
+	<!-- Imprementacion de repositorios -->
+	
+	<bean id="baseRepository" class="repository.imp.BaseHibernateRepository">		
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="usuarioRepository" class="repository.imp.HibernateUsuarioRepository" parent="baseRepository">
+	</bean>
+	
+	<bean id="danaideRepository" class="repository.imp.HibernateDanaideRepository" parent="baseRepository">
+	</bean>	
+
+	<bean id="productoRepository" class="repository.imp.HibernateProductoRepository" parent="baseRepository">
+	</bean>	
+	
+	<bean id="carritoRepository" class="repository.imp.HibernateCarritoRepository" parent="baseRepository">
+	</bean>	
+	
+	<!-- DTO Factory -->
+	<bean class="dto.DTOFactory" id="dtoFactory"> </bean>
+	
+	<!-- Factory de repositorios -->
+	<bean id="repositoryLocator" class="repository.RepositoryLocator" factory-method="getInstance">
+		<!-- Definido en la parte de "implementacion de repositorios" -->
+		<property name="usuarioRepository">
+			<ref bean="usuarioRepository" />
+		</property>
+		<property name="danaideRepository">
+			<ref bean="danaideRepository" />
+		</property>
+		<property name="productoRepository">
+			<ref bean="productoRepository" />
+		</property>
+		<property name="carritoRepository">
+			<ref bean="carritoRepository" />
+		</property>
+	</bean>
+	
+	<!-- Implementacion de servicios -->
+	<bean class="service.imp.UsuarioServiceImp" id="usuarioServiceTarget"> </bean>
+	<bean class="service.imp.ProductoServiceImp" id="productoServiceTarget"> </bean>
+	<bean class="service.imp.CarritoServiceImp" id="carritoServiceTarget"> </bean>
+
+	<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" id="personaService">
+		
+		<property name="transactionManager">
+			<ref bean="transactionManager"/>
+		</property>
+		<!-- se declara con que bean de "implementacion de servicios" se mapea esto -->
+		<property name="target">
+			<ref bean="usuarioServiceTarget"/>
+		</property>
+		
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+		
+	</bean>
+	<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" id="peliculaService">
+		
+		<property name="transactionManager">
+			<ref bean="transactionManager"/>
+		</property>
+		<property name="target">
+			<ref bean="productoServiceTarget"/>
+		</property>
+		
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+		
+	</bean>
+	<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" id="catalogoService">
+		
+		<property name="transactionManager">
+			<ref bean="transactionManager"/>
+		</property>
+		<property name="target">
+			<ref bean="carritoServiceTarget"/>
+		</property>
+		
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+		
+	</bean>
+
+	<!-- Factory de service -->
+	<bean class="service.ServiceLocator" id="serviceLocator" factory-method="getInstance">
+		<!-- aca se mapea los servicios de "impementacion de servicios" -->
+		<property name="usuarioService">
+			<ref bean="usuarioServiceTarget"/>
+		</property>
+		<property name="productoService">
+			<ref bean="productoServiceTarget"/>
+		</property>
+		<property name="carritoService">
+			<ref bean="carritoServiceTarget"/>
+		</property>
+	</bean>
+	
+</beans>

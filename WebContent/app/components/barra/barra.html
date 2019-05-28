@@ -1,0 +1,31 @@
+<nav class="navbar navbar-default">	
+	<select class="navbar-header" ng-options="usuario as usuario.nombre for usuario in usuarios" ng-model="usuarioSelect" ng-change="setUsuario()"></select>
+	<div class="navbar-header">
+		<strong class="navbar-text">
+			{{usuario.nombre}}
+			<span class="label label-warning" ng-if="usuario.vip">VIP</span>
+		</strong>
+		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" ng-click="buscarTop()" ng-if="usuarioSelect">TOP</button>
+   	</div>
+   	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  	<div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Top Productos</h4>
+      </div>
+      <div class="modal-body">
+      <table class="table table-hover" >
+			<tr>
+				<th>Nombre</th>
+				<th>Precio</th>
+			</tr>
+			<tr ng-repeat="producto in top">
+				<td>{{producto.nombre}}</td>
+				<td>{{producto.precio}}</td>
+			</tr>
+      </div>
+    </div>
+  </div>
+</div>
+</nav>

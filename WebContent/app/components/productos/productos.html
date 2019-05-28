@@ -1,0 +1,21 @@
+<div ng-if="hayCarrito()">
+	<!-- busqueda de productos-->
+	<div>
+		<form>
+			<div class="input-group">
+				<label class="sr-only" for="busquedaProducto">Buscar producto por nombre</label>
+				<div class="input-group-addon">
+					<span class="glyphicon glyphicon-search" id="busquedaProducto-glyph" aria-hidden="true"></span>
+				</div> 
+				<input ng-model="busqueda" type="text" class="form-control" placeholder="Buscar por nombre" id="busquedaProducto" aria-describedby="busquedaProducto-glyph"/>
+			</div>
+		</form>
+	</div>
+	<!-- lista de productos -->
+	<div ng-repeat="producto in productos | filter : {nombre : busqueda }" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+		<p>{{producto.nombre}}</p>
+		<p>{{producto.precio | number:'1.2'}}</p>
+		<button class="btn btn-success" ng-click="agregarProducto(producto)" ng-if="!enCarrito(producto)">Comprar</button>
+		<button class="btn btn-danger" ng-click="quitarProducto(producto)" ng-if="enCarrito(producto)">Cancelar compra</button>
+	</div>
+</div>

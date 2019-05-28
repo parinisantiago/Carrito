@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="model">
+	<class name="Danaide">
+		<id name="id" type="long" column="idDanaide" unsaved-value="0">
+            <generator class="increment" />
+        </id>
+        <set name="productos" cascade="all">
+            <key column="productos"/>
+            <one-to-many class="Producto"/>
+        </set>
+        <set name="usuarios" cascade="all">
+            <key column="usuarios"/>
+            <one-to-many class="Usuario"/>
+        </set>
+	</class>
+</hibernate-mapping>
